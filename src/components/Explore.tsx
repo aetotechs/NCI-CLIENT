@@ -1,12 +1,14 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { Badge } from '@/components/ui/badge';
 import { IStatus } from '@/App';
 
 function Explore({ status }: IStatus) {
+  const location = useLocation();
+  const { pathname } = location;
   const cards = [
     {
       id: 1,
@@ -78,14 +80,16 @@ function Explore({ status }: IStatus) {
 
   return (
     <div className="h-[934px]">
-      <div className="flex justify-center flex-col items-center mb-2">
-        <h3 className="font-bold text-[36px] mt-4">Explore Nile Coffee</h3>
-        <p className="font-normal text-sm">
-          Discover the rich flavors and unique origins of Nile Coffee
-        </p>
-      </div>
-      <div className="py-10">
-        <div className="flex flex-col md:grid grid-cols-3 gap-10">
+      {pathname !== '/shop-page' && (
+        <div className="flex justify-center flex-col items-center mb-2">
+          <h3 className="font-bold text-[36px] mt-4">Explore Nile Coffee</h3>
+          <p className="font-normal text-sm">
+            Discover the rich flavors and unique origins of Nile Coffee
+          </p>
+        </div>
+      )}
+      <div className={`py-10 ${pathname === '/shop-page' && 'py-0'}`}>
+        <div className={`flex flex-col md:grid grid-cols-3 gap-10 ${pathname==='/shop-page'&& 'gap-4'}`}>
           {cards.map((card, index) => {
             const isDisabled =
               card.bagStatus === 'Not Available' &&
@@ -95,11 +99,10 @@ function Explore({ status }: IStatus) {
             return (
               <div
                 key={index}
-                className={`w-[390px] h-[308px] border rounded-[20px] flex flex-col px-10 py-5 bg-white ${
+                className={`w-[390px] h-[308px] ${pathname == '/shop-page' && 'h-[270px] w-[280px] px-4 py-2'} border rounded-[20px] flex flex-col px-10 py-5 bg-white ${
                   isDisabled ? 'border-gray-300 bg-gray-100 text-gray-500' : 'border-primary/30'
                 }`}
-                style={{ pointerEvents: isDisabled ? 'none' : 'auto' }}
-              >
+                style={{ pointerEvents: isDisabled ? 'none' : 'auto' }}>
                 <div className="font-medium text-[18px] mb-3">{card.name}</div>
                 <div className="font-normal text-[15px] mb-3 flex gap-1 items-center">
                   <span>
@@ -115,8 +118,7 @@ function Explore({ status }: IStatus) {
                         {card.sampleStatus !== 'Available' && (
                           <Badge
                             variant="outline"
-                            className="bg-badgebackground border-none font-normal flex items-center gap-1 h-[20px] text-[11px] rounded-[7px]"
-                          >
+                            className="bg-badgebackground border-none font-normal flex items-center gap-1 h-[20px] text-[11px] rounded-[7px]">
                             <div className="h-[5px] w-[5px] rounded-full bg-destructive"></div>
                             <p className="text-destructive">{card.sampleStatus}</p>
                           </Badge>
@@ -127,8 +129,7 @@ function Explore({ status }: IStatus) {
                         {card.bagStatus !== 'Available' && (
                           <Badge
                             variant="outline"
-                            className="bg-badgebackground border-none font-normal flex items-center gap-1 h-[20px] text-[11px] rounded-[7px]"
-                          >
+                            className="bg-badgebackground border-none font-normal flex items-center gap-1 h-[20px] text-[11px] rounded-[7px]">
                             <div className="h-[5px] w-[5px] rounded-full bg-destructive"></div>
                             <p className="text-destructive">{card.bagStatus}</p>
                           </Badge>
@@ -142,17 +143,16 @@ function Explore({ status }: IStatus) {
                   <p className="font-normal text-inactive">{card.lotNumber}</p>
                 </div>
                 {status ? (
-                  <div className="flex justify-between w-[333px] gap-3">
+                  <div
+                    className={`flex justify-between w-[333px] gap-3  ${pathname == '/shop-page' && ' w-[234px]  flex '}`}>
                     <Button
-                      className="rounded-[10px] bg-primary text-white font-normal text-[15px] w-[168px] h-[45px]"
-                      disabled={isDisabled}
-                    >
+                      className={`rounded-[10px] bg-primary  text-white font-normal text-[15px] w-[168px] h-[45px] ${pathname == '/shop-page' && 'h-[30px] w-[160px]'}`}
+                      disabled={isDisabled}>
                       Add To Cart
                     </Button>
                     <Button
-                      className="rounded-[10px] w-[168px] h-[45px] text-primary font-normal text-[15px] bg-white border border-primary"
-                      disabled={isDisabled}
-                    >
+                      className={`rounded-[10px] w-[168px] h-[45px] text-primary font-normal text-[15px] bg-white border border-primary  ${pathname == '/shop-page' && 'h-[30px] w-[121px]  px-4 text-sm'}`}
+                      disabled={isDisabled}>
                       Request Sample
                     </Button>
                   </div>
@@ -166,17 +166,18 @@ function Explore({ status }: IStatus) {
           })}
         </div>
       </div>
-      <div className="flex justify-center">
-        <Link
-          className="flex justify-between items-center p-3 gap-2 border border-primary rounded-md text-primary font-semibold text-[16px] leading-5"
-          to="/"
-        >
-          View More
-          <span>
-            <ChevronRight />
-          </span>
-        </Link>
-      </div>
+      {pathname !== '/shop-page' && (
+        <div className="flex justify-center">
+          <Link
+            className="flex justify-between items-center p-3 gap-2 border border-primary rounded-md text-primary font-semibold text-[16px] leading-5"
+            to="/">
+            View More
+            <span>
+              <ChevronRight />
+            </span>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

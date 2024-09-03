@@ -21,7 +21,7 @@ function LandingPage({ status }: IStatus) {
         <Categories />
         <CoffeeJourney />
         <Explore status={status} />
-        <Benefits />
+        <Benefits status={status} />
       </main>
       <Footer />
     </>
